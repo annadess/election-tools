@@ -11,7 +11,7 @@ public class FirstPastThePost implements VotingSystem {
 	private int max;
 	
 	public Results calculate(Ballot[] ballots) {
-		searchForMaxIfNull(ballots);
+		searchForMaxIfZero(ballots);
 		sumVotes = getSumVotes(ballots);
 		int[] returnResults = calculatePositions();
 		return new PostitionalResult(returnResults);
@@ -47,7 +47,7 @@ public class FirstPastThePost implements VotingSystem {
 		return sumVotes;
 	}
 
-	private void searchForMaxIfNull(Ballot[] ballots) {
+	private void searchForMaxIfZero(Ballot[] ballots) {
 		if(max == 0){
 			for(Ballot iteratingBallot : ballots){
 				if(max<iteratingBallot.getEntryBoxes()[0])

@@ -8,4 +8,9 @@ public class WinnerResult extends Results {
 		super(places);
 	}
 	
+	public static final WinnerResult getResultFromFirstPlace(int firstPlace){
+		int[] places = new int[1];
+		places[0] = firstPlace;
+		return new WinnerResult(places);
+	}
 }
