@@ -25,6 +25,6 @@
   		</xAxis>
       </StackedBarChart>
       <Button layoutX="341.0" layoutY="726.0" mnemonicParsing="false" text="&lt;&lt;" />
-      <Button layoutX="426.0" layoutY="726.0" mnemonicParsing="false" text="&gt;&gt;" />
+      <Button layoutX="426.0" layoutY="726.0" mnemonicParsing="false" onAction="#forwardButton" text="&gt;&gt;" />
    </children>
 </AnchorPane>

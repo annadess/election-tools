@@ -1,5 +1,7 @@
 package view;
 
+import java.util.List;
+
 import functional.AlternativeVote;
 import functional.FirstPastThePost;
 import javafx.collections.FXCollections;
@@ -13,6 +15,11 @@ import javafx.scene.control.Label;
 import model.Ballot;
 
 public class DefaultController {
+	
+	private List<int[]> sumVoteSequence;
+	private FirstPastThePost fptpVote;
+	private AlternativeVote avVote;
+	private int sequencePosition;
 
 	@FXML
 	private StackedBarChart<Integer,String> avStackedChart;
@@ -33,7 +40,19 @@ public class DefaultController {
     
     @FXML
     void forwardButton(ActionEvent event){
-    	
+    	if(true){
+    		sequencePosition++;
+    		avStackedChart.getData().clear();
+        	ObservableList<XYChart.Data<Integer,String>> stackedChartData = FXCollections.observableArrayList();
+        	int[] sumVotes = avVote.getSumVotesSequence().get(sequencePosition);
+        	Integer counter = 1;
+        	for(int iterateSum : sumVotes){
+        		stackedChartData.add(new XYChart.Data<Integer, String>(new Integer(iterateSum), counter.toString()));
+        		counter +=1;
+        	}
+        	XYChart.Series<Integer,String> chartSeries = new XYChart.Series<Integer,String>(stackedChartData);
+        	avStackedChart.getData().add(chartSeries);
+    	}
     } 
     
     @FXML
@@ -44,8 +63,8 @@ public class DefaultController {
     	for(Ballot iteratingBallot : ballots){
 			sumVotes[iteratingBallot.getEntryBoxes()[0]-1]++;
 		}
-    	FirstPastThePost fptpVote = new FirstPastThePost(10);
-    	AlternativeVote avVote = new AlternativeVote(10);
+    	fptpVote = new FirstPastThePost(10);
+    	avVote = new AlternativeVote(10);
     	Integer fptpFirstPlace = fptpVote.calculate(ballots).getPlaces()[0];
     	Integer avFirstPlace = avVote.calculate(ballots).getPlaces()[0];
     	fptpLabel.setText(fptpFirstPlace.toString());
@@ -56,7 +75,7 @@ public class DefaultController {
     	}
     	pieChart.getData().addAll(pieChartData);
     
-    	
+    	sequencePosition=0;
     	avStackedChart.getData().clear();
     	ObservableList<XYChart.Data<Integer,String>> stackedChartData = FXCollections.observableArrayList();
     	sumVotes = avVote.getSumVotesSequence().getFirst();
