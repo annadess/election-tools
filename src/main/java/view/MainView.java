@@ -27,7 +27,7 @@ public class MainView extends Application {
 
 	private void loadAndShowGameViewWindow(Stage primaryStage) throws IOException {
 		ClassLoader classLoader = getClass().getClassLoader();
-		FXMLLoader defaultViewLoader = new FXMLLoader(classLoader.getResource("DefaultView.fxml"));
+		FXMLLoader defaultViewLoader = new FXMLLoader(classLoader.getResource("ExpView.fxml"));
 		Pane defaultViewPane = (Pane) defaultViewLoader.load();
 		Scene defaultViewScene = new Scene(defaultViewPane);
 		primaryStage.setScene(defaultViewScene);

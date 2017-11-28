@@ -30,17 +30,29 @@ public class DefaultController {
 	@FXML
 	private Label avLabel;
 	
-    @FXML
-    private PieChart pieChart;
+	@FXML
+	private StackedBarChart<Integer,String> fptpStackedChart;
     
     @FXML
     void backwardButton(ActionEvent event){
-    	
+	    if(sequencePosition > 0){
+    		sequencePosition--;
+			avStackedChart.getData().clear();
+	    	ObservableList<XYChart.Data<Integer,String>> stackedChartData = FXCollections.observableArrayList();
+	    	int[] sumVotes = avVote.getSumVotesSequence().get(sequencePosition);
+	    	Integer counter = 1;
+	    	for(int iterateSum : sumVotes){
+	    		stackedChartData.add(new XYChart.Data<Integer, String>(new Integer(iterateSum), counter.toString()));
+	    		counter +=1;
+	    	}
+	    	XYChart.Series<Integer,String> chartSeries = new XYChart.Series<Integer,String>(stackedChartData);
+	    	avStackedChart.getData().add(chartSeries);
+    	}
     }
     
     @FXML
     void forwardButton(ActionEvent event){
-    	if(true){
+    	if(sequencePosition < avVote.getSumVotesSequence().size()-1){
     		sequencePosition++;
     		avStackedChart.getData().clear();
         	ObservableList<XYChart.Data<Integer,String>> stackedChartData = FXCollections.observableArrayList();
@@ -57,7 +69,6 @@ public class DefaultController {
     
     @FXML
     void button(ActionEvent event){
-    	pieChart.getData().clear(); 
     	int[] sumVotes = new int[10];
     	Ballot[] ballots = functional.BallotGenerator.generate(601, (byte) 5, 10);
     	for(Ballot iteratingBallot : ballots){
@@ -69,11 +80,6 @@ public class DefaultController {
     	Integer avFirstPlace = avVote.calculate(ballots).getPlaces()[0];
     	fptpLabel.setText(fptpFirstPlace.toString());
     	avLabel.setText(avFirstPlace.toString());
-    	ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-    	for(int i=0; i<10;i++){
-    		pieChartData.add(new PieChart.Data(new Integer(i+1).toString(), sumVotes[i]));
-    	}
-    	pieChart.getData().addAll(pieChartData);
     
     	sequencePosition=0;
     	avStackedChart.getData().clear();
@@ -86,6 +92,16 @@ public class DefaultController {
     	}
     	XYChart.Series<Integer,String> chartSeries = new XYChart.Series<Integer,String>(stackedChartData);
     	avStackedChart.getData().add(chartSeries);
+    	
+    	fptpStackedChart.getData().clear();
+    	ObservableList<XYChart.Data<Integer,String>> fptpStackedChartData = FXCollections.observableArrayList();
+    	Integer fptpCounter = 1;
+    	for(int iterateSum : sumVotes){
+    		fptpStackedChartData.add(new XYChart.Data<Integer, String>(new Integer(iterateSum), fptpCounter.toString()));
+    		fptpCounter +=1;
+    	}
+    	XYChart.Series<Integer,String> fptpChartSeries = new XYChart.Series<Integer,String>(fptpStackedChartData);
+    	fptpStackedChart.getData().add(fptpChartSeries);
     }
 
 }
