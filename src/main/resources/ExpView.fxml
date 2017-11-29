@@ -23,7 +23,7 @@
          <children>
             <AnchorPane>
                <children>
-                  <Button layoutX="175.0" layoutY="731.0" mnemonicParsing="false" onAction="#button" text="Button" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="173.0" AnchorPane.topAnchor="736.0" />
+                  <Button layoutX="175.0" layoutY="731.0" mnemonicParsing="false" onAction="#button" text="Retry" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="173.0" AnchorPane.topAnchor="736.0" />
                   <Label fx:id="avLabel" layoutX="200.0" layoutY="684.0" />
                   <Label layoutX="156.0" layoutY="47.0" prefHeight="18.0" prefWidth="90.0" text="AlternativeVote" AnchorPane.bottomAnchor="732.0" AnchorPane.leftAnchor="156.0" AnchorPane.rightAnchor="154.0" />
                   <StackedBarChart fx:id="avStackedChart" animated="false" layoutX="19.0" layoutY="184.0" prefHeight="433.0" prefWidth="362.0" AnchorPane.bottomAnchor="183.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="184.0">
@@ -40,7 +40,7 @@
             </AnchorPane>
             <AnchorPane GridPane.columnIndex="1">
                <children>
-                  <Button layoutX="175.0" layoutY="736.0" mnemonicParsing="false" onAction="#button" text="Button" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="173.0" AnchorPane.topAnchor="736.0" />
+                  <Button layoutX="175.0" layoutY="736.0" mnemonicParsing="false" onAction="#button" text="Retry" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="173.0" AnchorPane.topAnchor="736.0" />
                   <Label fx:id="fptpLabel" layoutX="199.0" layoutY="659.0" />
                   <Label layoutX="156.0" layoutY="51.0" prefHeight="17.0" prefWidth="90.0" text="FirstPastThePost" AnchorPane.bottomAnchor="732.0" AnchorPane.leftAnchor="156.0" AnchorPane.rightAnchor="154.0" AnchorPane.topAnchor="51.0" />
                   <StackedBarChart fx:id="fptpStackedChart" animated="false" layoutX="18.0" layoutY="184.0" prefHeight="433.0" prefWidth="362.0" AnchorPane.bottomAnchor="183.0" AnchorPane.leftAnchor="19.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="184.0">
@@ -52,7 +52,7 @@
                      </xAxis>
                   </StackedBarChart>
                   <Button disable="true" layoutX="140.0" layoutY="736.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="43.0" text="&lt;&lt;" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="232.0" AnchorPane.topAnchor="736.0" />
-                  <Button disable="true" layoutX="232.0" layoutY="736.0" mnemonicParsing="false" onAction="#forwardButto" prefHeight="25.0" prefWidth="43.0" text="&gt;&gt;" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="232.0" AnchorPane.rightAnchor="125.0" AnchorPane.topAnchor="736.0" />
+                  <Button disable="true" layoutX="232.0" layoutY="736.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="43.0" text="&gt;&gt;" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="232.0" AnchorPane.rightAnchor="125.0" AnchorPane.topAnchor="736.0" />
                </children>
             </AnchorPane>
          </children>

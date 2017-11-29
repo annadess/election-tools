@@ -21,6 +21,16 @@ public class DefaultController {
 	private AlternativeVote avVote;
 	private int sequencePosition;
 
+	private int voters;
+	private byte ratings;
+	private int parties;
+	
+	public void setAllGeneratorVariables(int voters, byte ratings, int parties){
+		this.voters = voters;
+		this.ratings = ratings;
+		this.parties = parties;
+	}
+	
 	@FXML
 	private StackedBarChart<Integer,String> avStackedChart;
 	
@@ -69,13 +79,13 @@ public class DefaultController {
     
     @FXML
     void button(ActionEvent event){
-    	int[] sumVotes = new int[10];
-    	Ballot[] ballots = functional.BallotGenerator.generate(601, (byte) 5, 10);
+    	int[] sumVotes = new int[parties];
+    	Ballot[] ballots = functional.BallotGenerator.generate(voters, ratings, parties);
     	for(Ballot iteratingBallot : ballots){
 			sumVotes[iteratingBallot.getEntryBoxes()[0]-1]++;
 		}
-    	fptpVote = new FirstPastThePost(10);
-    	avVote = new AlternativeVote(10);
+    	fptpVote = new FirstPastThePost(parties);
+    	avVote = new AlternativeVote(parties);
     	Integer fptpFirstPlace = fptpVote.calculate(ballots).getPlaces()[0];
     	Integer avFirstPlace = avVote.calculate(ballots).getPlaces()[0];
     	fptpLabel.setText(fptpFirstPlace.toString());
