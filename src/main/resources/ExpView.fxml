@@ -36,6 +36,7 @@
                   </StackedBarChart>
                   <Button layoutX="140.0" layoutY="731.0" mnemonicParsing="false" onAction="#backwardButton" text="&lt;&lt;" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="232.0" AnchorPane.topAnchor="736.0" />
                   <Button layoutX="229.0" layoutY="730.0" mnemonicParsing="false" onAction="#forwardButton" text="&gt;&gt;" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="232.0" AnchorPane.rightAnchor="125.0" AnchorPane.topAnchor="736.0" />
+                  <Label layoutX="185.0" layoutY="667.0" text="Result" />
                </children>
             </AnchorPane>
             <AnchorPane GridPane.columnIndex="1">
@@ -53,6 +54,7 @@
                   </StackedBarChart>
                   <Button disable="true" layoutX="140.0" layoutY="736.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="43.0" text="&lt;&lt;" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="125.0" AnchorPane.rightAnchor="232.0" AnchorPane.topAnchor="736.0" />
                   <Button disable="true" layoutX="232.0" layoutY="736.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="43.0" text="&gt;&gt;" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="232.0" AnchorPane.rightAnchor="125.0" AnchorPane.topAnchor="736.0" />
+                  <Label layoutX="182.0" layoutY="642.0" prefHeight="17.0" prefWidth="35.0" text="Result" />
                </children>
             </AnchorPane>
          </children>
