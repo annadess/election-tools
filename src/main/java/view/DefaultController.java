@@ -1,5 +1,6 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import functional.AlternativeVote;
@@ -15,11 +16,11 @@ import javafx.scene.control.Label;
 import model.Ballot;
 
 public class DefaultController {
-	
-	private List<int[]> sumVoteSequence;
+
 	private FirstPastThePost fptpVote;
 	private AlternativeVote avVote;
 	private int sequencePosition;
+	private List<XYChart.Series> avSeriesList = new ArrayList<XYChart.Series>();
 
 	private int voters;
 	private byte ratings;
@@ -47,16 +48,24 @@ public class DefaultController {
     void backwardButton(ActionEvent event){
 	    if(sequencePosition > 0){
     		sequencePosition--;
+			avSeriesList = new ArrayList<XYChart.Series>();
 			avStackedChart.getData().clear();
-	    	ObservableList<XYChart.Data<Integer,String>> stackedChartData = FXCollections.observableArrayList();
-	    	int[] sumVotes = avVote.getSumVotesSequence().get(sequencePosition);
-	    	Integer counter = 1;
-	    	for(int iterateSum : sumVotes){
-	    		stackedChartData.add(new XYChart.Data<Integer, String>(new Integer(iterateSum), counter.toString()));
-	    		counter +=1;
-	    	}
-	    	XYChart.Series<Integer,String> chartSeries = new XYChart.Series<Integer,String>(stackedChartData);
-	    	avStackedChart.getData().add(chartSeries);
+			XYChart.Series<Integer,String> stackedChartData = new XYChart.Series<Integer, String>(); //TODO: Change to list
+			stackedChartData.setName("From first preference");
+			int[] sumVotes = avVote.getSumVotesSequence().getFirst();
+			Integer counter = 1;
+			for(int iterateSum : sumVotes){
+				stackedChartData.getData().add(new XYChart.Data<Integer, String>(new Integer(iterateSum), counter.toString()));
+				counter +=1;
+			}
+			avSeriesList.add(stackedChartData);
+			avStackedChart.getData().add(avSeriesList.get(0));
+
+			int tempSeqPosition = sequencePosition;
+			sequencePosition = 0;
+			for(;sequencePosition<tempSeqPosition;) {
+				forwardButton(new ActionEvent());
+			}
     	}
     }
     
@@ -65,26 +74,20 @@ public class DefaultController {
     	if(sequencePosition < avVote.getSumVotesSequence().size()-1){
     		sequencePosition++;
     		avStackedChart.getData().clear();
-        	ObservableList<XYChart.Data<Integer,String>> stackedChartData = FXCollections.observableArrayList();
-        	int[] sumVotes = avVote.getSumVotesSequence().get(sequencePosition);
-        	Integer counter = 1;
-        	for(int iterateSum : sumVotes){
-        		stackedChartData.add(new XYChart.Data<Integer, String>(new Integer(iterateSum), counter.toString()));
-        		counter +=1;
-        	}
-        	XYChart.Series<Integer,String> chartSeries = new XYChart.Series<Integer,String>(stackedChartData);
-        	avStackedChart.getData().add(chartSeries);
+    		addNextElementToSeriesList();
+			for(XYChart.Series series : avSeriesList){
+				avStackedChart.getData().add(series);
+			}
     	}
-    } 
-    
-    @FXML
+    }
+
+	@FXML
     void button(ActionEvent event){
+		avSeriesList = new ArrayList<XYChart.Series>();
     	int[] sumVotes = new int[parties];
     	Ballot[] ballots = functional.BallotGenerator.generate(voters, ratings, parties);
-    	for(Ballot iteratingBallot : ballots){
-			sumVotes[iteratingBallot.getEntryBoxes()[0]-1]++;
-		}
-    	fptpVote = new FirstPastThePost(parties);
+		addVotesToSumArrayFromPosition(sumVotes, ballots, 0);
+		fptpVote = new FirstPastThePost(parties);
     	avVote = new AlternativeVote(parties);
     	Integer fptpFirstPlace = fptpVote.calculate(ballots).getPlaces()[0];
     	Integer avFirstPlace = avVote.calculate(ballots).getPlaces()[0];
@@ -93,15 +96,16 @@ public class DefaultController {
     
     	sequencePosition=0;
     	avStackedChart.getData().clear();
-    	ObservableList<XYChart.Data<Integer,String>> stackedChartData = FXCollections.observableArrayList();
-    	sumVotes = avVote.getSumVotesSequence().getFirst();
+    	XYChart.Series<Integer,String> stackedChartData = new XYChart.Series<Integer, String>(); //TODO: Change to list
+    	stackedChartData.setName("From first preference");
+		sumVotes = avVote.getSumVotesSequence().getFirst();
     	Integer counter = 1;
     	for(int iterateSum : sumVotes){
-    		stackedChartData.add(new XYChart.Data<Integer, String>(new Integer(iterateSum), counter.toString()));
+    		stackedChartData.getData().add(new XYChart.Data<Integer, String>(new Integer(iterateSum), counter.toString()));
     		counter +=1;
     	}
-    	XYChart.Series<Integer,String> chartSeries = new XYChart.Series<Integer,String>(stackedChartData);
-    	avStackedChart.getData().add(chartSeries);
+		avSeriesList.add(stackedChartData);
+    	avStackedChart.getData().add(avSeriesList.get(0));
     	
     	fptpStackedChart.getData().clear();
     	ObservableList<XYChart.Data<Integer,String>> fptpStackedChartData = FXCollections.observableArrayList();
@@ -113,5 +117,35 @@ public class DefaultController {
     	XYChart.Series<Integer,String> fptpChartSeries = new XYChart.Series<Integer,String>(fptpStackedChartData);
     	fptpStackedChart.getData().add(fptpChartSeries);
     }
+
+	private void addVotesToSumArrayFromPosition(int[] sumVotes, Ballot[] ballots, int position) {
+		for(Ballot iteratingBallot : ballots){
+            sumVotes[iteratingBallot.getEntryBoxes()[position]-1]++;
+        }
+	}
+
+	private void addNextElementToSeriesList() {
+    	XYChart.Series<Integer,String> nextSeries = new XYChart.Series<>();
+		int[] currentSum = avVote.getSumVotesSequence().get(sequencePosition).clone();
+    	int[] previousSum = avVote.getSumVotesSequence().get(sequencePosition-1).clone();
+		XYChart.Series previousSeries = avSeriesList.get(sequencePosition-1);
+    	for (int i=0; i<currentSum.length;i++){
+    		currentSum[i] = currentSum[i] - previousSum[i];
+			if(currentSum[i]<0) {
+				nextSeries.setName(String.valueOf(i + 1));
+				currentSum[i]=0;
+				removeColumnFromSeriesList(i);
+			}
+			nextSeries.getData().add(new XYChart.Data<Integer, String>(new Integer(currentSum[i]), String.valueOf(i+1)));
+    	}
+		avSeriesList.add(nextSeries);
+    }
+
+	private void removeColumnFromSeriesList(int removeIndex) {
+    	for(int i=0;i<sequencePosition;i++){
+			XYChart.Data<Integer, String> removingData = (XYChart.Data<Integer, String>) avSeriesList.get(i).getData().get(removeIndex);
+    		removingData.setXValue(0);
+		}
+	}
 
 }
