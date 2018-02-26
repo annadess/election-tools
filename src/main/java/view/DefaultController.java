@@ -5,11 +5,9 @@ import java.util.List;
 
 import functional.AlternativeVote;
 import functional.FirstPastThePost;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
@@ -49,17 +47,9 @@ public class DefaultController {
 	    if(sequencePosition > 0){
     		sequencePosition--;
 			avSeriesList = new ArrayList<XYChart.Series>();
-			avStackedChart.getData().clear();
-			XYChart.Series<Integer,String> stackedChartData = new XYChart.Series<Integer, String>(); //TODO: Change to list
-			stackedChartData.setName("From first preference");
 			int[] sumVotes = avVote.getSumVotesSequence().getFirst();
-			Integer counter = 1;
-			for(int iterateSum : sumVotes){
-				stackedChartData.getData().add(new XYChart.Data<Integer, String>(new Integer(iterateSum), counter.toString()));
-				counter +=1;
-			}
-			avSeriesList.add(stackedChartData);
-			avStackedChart.getData().add(avSeriesList.get(0));
+
+			resetAvChart(sumVotes);
 
 			int tempSeqPosition = sequencePosition;
 			sequencePosition = 0;
@@ -83,26 +73,35 @@ public class DefaultController {
 
 	@FXML
     void button(ActionEvent event){
-		avSeriesList = new ArrayList<XYChart.Series>();
-    	int[] sumVotes = new int[parties];
-    	Ballot[] ballots = functional.BallotGenerator.generate(voters, ratings, parties);
-		addVotesToSumArrayFromPosition(sumVotes, ballots, 0);
-		fptpVote = new FirstPastThePost(parties);
-    	avVote = new AlternativeVote(parties);
-    	Integer fptpFirstPlace = fptpVote.calculate(ballots).getPlaces()[0];
-    	Integer avFirstPlace = avVote.calculate(ballots).getPlaces()[0];
-    	fptpLabel.setText(fptpFirstPlace.toString());
-    	avLabel.setText(avFirstPlace.toString());
-		sumVotes = avVote.getSumVotesSequence().getFirst();
+		int[] sumVotes = initWindowAndGetSumVotes();
     
     	sequencePosition=0;
-    	XYChart.Series<Integer,String> stackedChartData = new XYChart.Series<Integer, String>();
-		addDataToSeries(sumVotes, stackedChartData, avStackedChart.getData());
-		avSeriesList.add(stackedChartData);
+    	resetAvChart(sumVotes);
 
 		XYChart.Series<Integer,String> fptpStackedChartData = new XYChart.Series<Integer, String>();
 		addDataToSeries(sumVotes, fptpStackedChartData, fptpStackedChart.getData());
     }
+
+	private int[] initWindowAndGetSumVotes() {
+		avSeriesList = new ArrayList<XYChart.Series>();
+		int[] sumVotes = new int[parties];
+		Ballot[] ballots = functional.BallotGenerator.generate(voters, ratings, parties);
+		addVotesToSumArrayFromPosition(sumVotes, ballots, 0);
+		fptpVote = new FirstPastThePost(parties);
+		avVote = new AlternativeVote(parties);
+		Integer fptpFirstPlace = fptpVote.calculate(ballots).getPlaces()[0];
+		Integer avFirstPlace = avVote.calculate(ballots).getPlaces()[0];
+		fptpLabel.setText(fptpFirstPlace.toString());
+		avLabel.setText(avFirstPlace.toString());
+		sumVotes = avVote.getSumVotesSequence().getFirst();
+		return sumVotes;
+	}
+
+	private void resetAvChart(int[] sumVotes) {
+		XYChart.Series<Integer,String> stackedChartData = new XYChart.Series<Integer, String>();
+		addDataToSeries(sumVotes, stackedChartData, avStackedChart.getData());
+		avSeriesList.add(stackedChartData);
+	}
 
 	private void addDataToSeries(int[] sumVotes, XYChart.Series<Integer, String> stackedChartData, ObservableList<XYChart.Series<Integer, String>> data) {
 		data.clear();
