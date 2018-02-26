@@ -93,30 +93,27 @@ public class DefaultController {
     	Integer avFirstPlace = avVote.calculate(ballots).getPlaces()[0];
     	fptpLabel.setText(fptpFirstPlace.toString());
     	avLabel.setText(avFirstPlace.toString());
+		sumVotes = avVote.getSumVotesSequence().getFirst();
     
     	sequencePosition=0;
-    	avStackedChart.getData().clear();
-    	XYChart.Series<Integer,String> stackedChartData = new XYChart.Series<Integer, String>(); //TODO: Change to list
-    	stackedChartData.setName("From first preference");
-		sumVotes = avVote.getSumVotesSequence().getFirst();
-    	Integer counter = 1;
-    	for(int iterateSum : sumVotes){
-    		stackedChartData.getData().add(new XYChart.Data<Integer, String>(new Integer(iterateSum), counter.toString()));
-    		counter +=1;
-    	}
+    	XYChart.Series<Integer,String> stackedChartData = new XYChart.Series<Integer, String>();
+		addDataToSeries(sumVotes, stackedChartData, avStackedChart.getData());
 		avSeriesList.add(stackedChartData);
-    	avStackedChart.getData().add(avSeriesList.get(0));
-    	
-    	fptpStackedChart.getData().clear();
-    	ObservableList<XYChart.Data<Integer,String>> fptpStackedChartData = FXCollections.observableArrayList();
-    	Integer fptpCounter = 1;
-    	for(int iterateSum : sumVotes){
-    		fptpStackedChartData.add(new XYChart.Data<Integer, String>(new Integer(iterateSum), fptpCounter.toString()));
-    		fptpCounter +=1;
-    	}
-    	XYChart.Series<Integer,String> fptpChartSeries = new XYChart.Series<Integer,String>(fptpStackedChartData);
-    	fptpStackedChart.getData().add(fptpChartSeries);
+
+		XYChart.Series<Integer,String> fptpStackedChartData = new XYChart.Series<Integer, String>();
+		addDataToSeries(sumVotes, fptpStackedChartData, fptpStackedChart.getData());
     }
+
+	private void addDataToSeries(int[] sumVotes, XYChart.Series<Integer, String> stackedChartData, ObservableList<XYChart.Series<Integer, String>> data) {
+		data.clear();
+		stackedChartData.setName("From first preference");
+		Integer counter = 1;
+		for (int iterateSum : sumVotes) {
+			stackedChartData.getData().add(new XYChart.Data<Integer, String>(new Integer(iterateSum), counter.toString()));
+			counter += 1;
+		}
+		data.add(stackedChartData);
+	}
 
 	private void addVotesToSumArrayFromPosition(int[] sumVotes, Ballot[] ballots, int position) {
 		for(Ballot iteratingBallot : ballots){
