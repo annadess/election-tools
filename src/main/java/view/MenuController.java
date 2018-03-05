@@ -2,6 +2,7 @@ package view;
 
 import java.io.IOException;
 
+import functional.AlternativeVote;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,16 +30,30 @@ public class MenuController {
 
     @FXML
     void openCompareView(ActionEvent event) throws IOException {
-    	ClassLoader classLoader = getClass().getClassLoader();
-		FXMLLoader viewLoader = new FXMLLoader(classLoader.getResource("ExpView.fxml"));
-		Pane viewPane = (Pane) viewLoader.load();
+
+        ComparisonFrame controller = new ComparisonFrame();
+		controller.addElementToTheLeft(new AlternativeVotePane());
+		controller.addElementToTheRight(new FirstPastThePostPane());
+		primaryStage.setScene(new Scene(controller));
+		primaryStage.setTitle("Comparing Voting Systems");
+		primaryStage.show();
+
+        int voters = Integer.parseInt(this.voters.getText());
+        byte ratings = (byte) Integer.parseInt(this.ratings.getText());
+        int parties = Integer.parseInt(this.parties.getText());
+        controller.setAllGeneratorVariables(voters, ratings, parties);
+        controller.recalculateVotes(new ActionEvent());
+
+    	/*ClassLoader classLoader = getClass().getClassLoader();
+		FXMLLoader viewLoader = new FXMLLoader(classLoader.getResource("AlternativeVotePane.fxml"));
+		Pane viewPane = viewLoader.load();
 		Scene viewScene = new Scene(viewPane);
-		DefaultController controller = viewLoader.getController();
+		AlternativeVotePane controller = viewLoader.getController();
 		int voters = Integer.parseInt(this.voters.getText());
 		byte ratings = (byte) Integer.parseInt(this.ratings.getText());
 		int parties = Integer.parseInt(this.parties.getText());
 		primaryStage.setScene(viewScene);
-		controller.setAllGeneratorVariables(voters, ratings, parties);
+		controller.setAllGeneratorVariables(voters, ratings, parties);*/
     }
 
 }
