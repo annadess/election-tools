@@ -25,7 +25,7 @@ public class AlternativeVote implements VotingSystem {
 		int[][] ballots2D = getArrayFromBallots(ballots);
 		this.sumVotesSequence.add(sumVotes);
 		while(true){
-			System.out.println(Arrays.toString(sumVotes));
+			//System.out.println(Arrays.toString(sumVotes));
 			numOfCandidates = 0;
 			totalSumOfVotes = 0;
 			setCandidatesAndTotalVotes();

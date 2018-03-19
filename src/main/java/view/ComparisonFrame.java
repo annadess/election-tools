@@ -1,5 +1,6 @@
 package view;
 
+import enums.ElectionType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,9 +11,14 @@ import model.Ballot;
 import model.VotingSystemPane;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ComparisonFrame extends AnchorPane {
 
+    private int[] extraVotes;
+    private ElectionType type;
     private int voters;
     private byte ratings;
     private int parties;
@@ -20,11 +26,22 @@ public class ComparisonFrame extends AnchorPane {
     private VotingSystemPane leftSystem;
     private VotingSystemPane rightSystem;
 
-    public void setAllGeneratorVariables(int voters, byte ratings, int parties){
+    public void setAllGeneratorVariables(int voters, byte ratings, int parties, ElectionType type){
         this.voters = voters;
         this.ratings = ratings;
         this.parties = parties;
-        ballots = functional.BallotGenerator.generate(voters, ratings, parties);
+        this.type = type;
+        recalculateVotes(new ActionEvent());
+    }
+
+    private void fillExtraVotes() {
+        Random randGen = ThreadLocalRandom.current();
+        extraVotes = new int[voters];
+        for(int i=0;i<voters;i++){
+            extraVotes[i] = ballots[i].getEntryBoxes()[randGen.nextInt(2)];
+            System.out.println(ballots[i].getEntryBoxes()[0]);
+        }
+        System.out.println(Arrays.toString(extraVotes));
     }
 
     public ComparisonFrame(){
@@ -46,11 +63,18 @@ public class ComparisonFrame extends AnchorPane {
     @FXML
     void recalculateVotes(ActionEvent event) {
         ballots = functional.BallotGenerator.generate(voters, ratings, parties);
-        if(leftSystem!=null){
-            leftSystem.setBallotsAndParties(ballots,parties);
+        if (type == ElectionType.SINGLE_DISTRICT_VOTING) {
+            if(leftSystem!=null){
+                leftSystem.setBallotsAndParties(ballots,parties);
+            }
+            if(rightSystem!=null){
+                rightSystem.setBallotsAndParties(ballots,parties);
+            }
         }
-        if(rightSystem!=null){
-            rightSystem.setBallotsAndParties(ballots,parties);
+        else if(type.equals(ElectionType.PARLIAMENTARY_VOTING)){
+            if(ratings>1) {
+                fillExtraVotes();
+            }
         }
     }
 
