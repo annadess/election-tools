@@ -19,6 +19,7 @@ public class FirstPastThePostPane extends AnchorPane implements VotingSystemPane
 
     private int partiesCount;
     private FirstPastThePost fptpVote;
+    private Ballot[] ballots;
 
     @FXML
     private Label fptpLabel;
@@ -37,16 +38,6 @@ public class FirstPastThePostPane extends AnchorPane implements VotingSystemPane
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
-    }
-
-
-    @Override
-    public void setBallotsAndParties(Ballot[] ballots, int partiesCount) {
-        this.partiesCount = partiesCount;
-        int[] sumVotes = initWindowAndGetSumVotes(ballots);
-
-        XYChart.Series<Integer,String> fptpStackedChartData = new XYChart.Series<Integer, String>();
-        addDataToSeries(sumVotes, fptpStackedChartData, fptpStackedChart.getData());
     }
 
     private int[] initWindowAndGetSumVotes(Ballot[] ballots) {
@@ -74,4 +65,27 @@ public class FirstPastThePostPane extends AnchorPane implements VotingSystemPane
         }
         data.add(stackedChartData);
     }
+
+    @Override
+    public void setBallots(Ballot[] ballots) {
+        this.ballots = ballots;
+    }
+
+    @Override
+    public void setNumberOfParties(int partiesCount) {
+        this.partiesCount = partiesCount;
+    }
+
+    @Override
+    public void setDistricts(int numOfDistricts) {
+    }
+
+    @Override
+    public void init() {
+        int[] sumVotes = initWindowAndGetSumVotes(ballots);
+        XYChart.Series<Integer,String> fptpStackedChartData = new XYChart.Series<Integer, String>();
+        addDataToSeries(sumVotes, fptpStackedChartData, fptpStackedChart.getData());
+    }
+
+
 }

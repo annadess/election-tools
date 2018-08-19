@@ -9,15 +9,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ParlamentFirstPastThePost implements ParliamentaryVotingSystem {
+public class ParliamentFirstPastThePost implements ParliamentaryVotingSystem {
 
     private int numberOfDistricts;
     private int numberOfParties;
     private int numberOfTotalVoters;
     private Ballot[] ballots;
+
     private Pair<Integer,Integer>[] districtDividers;
 
-    public ParlamentFirstPastThePost(int numberOfDistricts, int numberOfParties, Ballot[] ballots) {
+    public Pair<Integer, Integer>[] getDistrictDividers() {
+        return districtDividers;
+    }
+
+    public ParliamentFirstPastThePost(int numberOfDistricts, int numberOfParties, Ballot[] ballots) {
         this.numberOfDistricts = numberOfDistricts;
         this.numberOfParties = numberOfParties;
         this.numberOfTotalVoters = ballots.length;
@@ -55,7 +60,7 @@ public class ParlamentFirstPastThePost implements ParliamentaryVotingSystem {
 
     public static void main(String[] args){
         Ballot[] ballots = BallotGenerator.generate(100, (byte) 1,5);
-        System.out.println(new ParlamentFirstPastThePost(10,5,ballots).calculate().getSeatList());
+        System.out.println(new ParliamentFirstPastThePost(10,5,ballots).calculate().getSeatList());
         System.out.println(Arrays.toString(new FirstPastThePost(5).calculate(ballots).getPlaces()));
     }
 }

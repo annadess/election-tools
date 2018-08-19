@@ -11,7 +11,6 @@ import model.Ballot;
 import model.VotingSystemPane;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -25,12 +24,14 @@ public class ComparisonFrame extends AnchorPane {
     private Ballot[] ballots;
     private VotingSystemPane leftSystem;
     private VotingSystemPane rightSystem;
-
-    public void setAllGeneratorVariables(int voters, byte ratings, int parties, ElectionType type){
+    private int districts;
+    
+    public void setAllGeneratorVariables(int voters, byte ratings, int parties, ElectionType type, int districts){ //TODO who the fuck writes code like this
         this.voters = voters;
         this.ratings = ratings;
         this.parties = parties;
         this.type = type;
+        this.districts = districts;
         recalculateVotes(new ActionEvent());
     }
 
@@ -39,9 +40,9 @@ public class ComparisonFrame extends AnchorPane {
         extraVotes = new int[voters];
         for(int i=0;i<voters;i++){
             extraVotes[i] = ballots[i].getEntryBoxes()[randGen.nextInt(2)];
-            System.out.println(ballots[i].getEntryBoxes()[0]);
+            //System.out.println(ballots[i].getEntryBoxes()[0]);
         }
-        System.out.println(Arrays.toString(extraVotes));
+        //System.out.println(Arrays.toString(extraVotes));
     }
 
     public ComparisonFrame(){
@@ -64,17 +65,15 @@ public class ComparisonFrame extends AnchorPane {
     void recalculateVotes(ActionEvent event) {
         ballots = functional.BallotGenerator.generate(voters, ratings, parties);
         if (type == ElectionType.SINGLE_DISTRICT_VOTING) {
-            if(leftSystem!=null){
-                leftSystem.setBallotsAndParties(ballots,parties);
-            }
-            if(rightSystem!=null){
-                rightSystem.setBallotsAndParties(ballots,parties);
-            }
+            setParliamentarySystem(leftSystem);
+            setParliamentarySystem(rightSystem);
         }
         else if(type.equals(ElectionType.PARLIAMENTARY_VOTING)){
             if(ratings>1) {
                 fillExtraVotes();
             }
+            setParliamentarySystem(leftSystem);
+            setParliamentarySystem(rightSystem);
         }
     }
 
@@ -88,4 +87,12 @@ public class ComparisonFrame extends AnchorPane {
         leftSystem = (VotingSystemPane) element;
     }
 
+    private void setParliamentarySystem(VotingSystemPane pane){
+        if(pane!=null){
+            pane.setBallots(ballots);
+            pane.setNumberOfParties(parties);
+            pane.setDistricts(districts);
+            pane.init();
+        }
+    }
 }

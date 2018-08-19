@@ -23,11 +23,13 @@ public class DefaultController {
 	private int voters;
 	private byte ratings;
 	private int parties;
+	private int districts;
 	
-	public void setAllGeneratorVariables(int voters, byte ratings, int parties){
+	public void setAllGeneratorVariables(int voters, byte ratings, int parties, int districts){
 		this.voters = voters;
 		this.ratings = ratings;
 		this.parties = parties;
+		this.districts = districts;
 	}
 	
 	@FXML

@@ -15,4 +15,13 @@ public class Seats {
     public List<Pair<Integer, Integer>> getSeatList() {
         return seatList;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for(Pair pair : seatList){
+            sb.append("Party no.").append(pair.getKey().toString()).append(": ").append(pair.getValue()).append("  ");
+        }
+        return sb.toString()    ;
+    }
 }

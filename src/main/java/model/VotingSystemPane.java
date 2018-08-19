@@ -1,5 +1,12 @@
 package model;
 
 public interface VotingSystemPane {
-    public void setBallotsAndParties(Ballot[] ballots, int partiesCount);
+
+    void setBallots(Ballot[] ballots);
+
+    void setNumberOfParties(int partiesCount);
+
+    void setDistricts(int numOfDistricts);
+
+    void init();
 }

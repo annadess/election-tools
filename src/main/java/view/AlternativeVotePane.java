@@ -22,6 +22,7 @@ public class AlternativeVotePane extends AnchorPane implements VotingSystemPane 
     private AlternativeVote avVote;
     private int sequencePosition;
     private List<XYChart.Series> avSeriesList = new ArrayList<XYChart.Series>();
+    private Ballot[] ballots;
 
     public AlternativeVotePane(){
         ClassLoader classLoader = getClass().getClassLoader();
@@ -69,15 +70,6 @@ public class AlternativeVotePane extends AnchorPane implements VotingSystemPane 
                 avStackedChart.getData().add(series);
             }
         }
-    }
-
-    @Override
-    public void setBallotsAndParties(Ballot[] ballots,int partiesCount) {
-        this.partiesCount = partiesCount;
-        int[] sumVotes = initWindowAndGetSumVotes(ballots);
-
-        sequencePosition=0;
-        resetAvChart(sumVotes);
     }
 
     private int[] initWindowAndGetSumVotes(Ballot[] ballots) {
@@ -136,5 +128,26 @@ public class AlternativeVotePane extends AnchorPane implements VotingSystemPane 
             XYChart.Data<Integer, String> removingData = (XYChart.Data<Integer, String>) avSeriesList.get(i).getData().get(removeIndex);
             removingData.setXValue(0);
         }
+    }
+
+    @Override
+    public void setBallots(Ballot[] ballots) {
+        this.ballots = ballots;
+    }
+
+    @Override
+    public void setNumberOfParties(int partiesCount) {
+        this.partiesCount = partiesCount;
+    }
+
+    @Override
+    public void setDistricts(int numOfDistricts) {
+    }
+
+    @Override
+    public void init() {
+        int[] sumVotes = initWindowAndGetSumVotes(ballots);
+        sequencePosition=0;
+        resetAvChart(sumVotes);
     }
 }
